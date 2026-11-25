@@ -24,7 +24,9 @@ SERVER_PORT = 8080
 BUFFER_SIZE = 1024
 BUFFER_SIZE_FILE = 65536
 
-SAVE_DIR = "received_files"
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
+
+SAVE_DIR = os.path.join(PROJECT_ROOT, "received_files")
 os.makedirs(SAVE_DIR, exist_ok=True)
 
 BYTE_NUM = 8
@@ -69,17 +71,12 @@ if message.startswith("FILE_REQUEST:"):
                 file.write(data)
                 received_size += len(data)
 
-                if not data:
-                    break
-
         if received_size == file_size:
             print(f"File '{filename}' successfully received.")
-        else:
-            print("File transfer incomplete.")
 
     else:
         connection.sendall(f"File sharing rejected: {filename}".encode("utf-8"))
         print("File transfer rejected.")
 
 connection.close()
-server.close()
+server.close()  
